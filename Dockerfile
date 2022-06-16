@@ -20,8 +20,10 @@ ENV ESMF_INSTALL_LIBDIR="/usr/local/lib"
 ENV ESMF_INSTALL_MODDIR="/usr/local/mod"
 ENV ESMF_INSTALL_BINDIR="/usr/local/bin"
 ENV ESMF_INSTALL_DOCDIR="/usr/local/doc"
+ENV ESMF_F90COMPILEOPTS="-fallow-argument-mismatch"
+ENV ESMF_INSTALL_HEADERDIR="/usr/local/include"
 ENV ESMFMKFILE="/usr/local/lib/esmf.mk"
 ENV ESMF_ARRAY_LITE="TRUE"
 
-RUN make -C ${ESMF_DIR} -j4 lib
+RUN make -C ${ESMF_DIR} -j8 all
 RUN make -C ${ESMF_DIR} install
