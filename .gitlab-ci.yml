@@ -2,7 +2,7 @@ stages:
     - build
 
 variables:
-    CONTAINER_3_10_TAG: https://registry.hzdr.de/2022-06-14-ci-workshop/docker-and-gitlab-ci/python-poetry:3.10
+    CONTAINER_3_10_TAG: registry.hzdr.de/2022-06-14-ci-workshop/docker-and-gitlab-ci/python-poetry:3.10
 
 build-docker:
     image: docker:20.10.17
