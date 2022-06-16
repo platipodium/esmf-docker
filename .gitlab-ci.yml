@@ -1,0 +1,16 @@
+stages:
+    - build
+
+
+build-docker:
+    # Have a docker in docker client
+    image: docker:20.10.17
+    stage: build
+    
+    # Load other services, such as databases or dockers, will be 
+    # available in your image.  
+    services: 
+        - docker:20.10.17-dind # dind = docker in docker
+
+    script:
+        - Nothing here yet
