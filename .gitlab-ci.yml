@@ -13,4 +13,8 @@ build-docker:
         - docker:20.10.17-dind # dind = docker in docker
 
     script:
-        - Nothing here yet
+        # pass the VERSION variable to your container (see Dockerfile)
+        - docker build -t $CI_REGISTRY_IMAGE/python-poetry:3.10 --build-arg VERSION=3.10 .
+
+    tags:
+        - docker
