@@ -1,9 +1,20 @@
+# GitLab CI configuration file for building ESMF docker images based
+# on ubuntu
+# 
+# @author Carsten Lemmen <carsten.lemmen@hereon.de
+# @copyright 2022 Helmholtz-Zentrum hereon
+# @license CC-0 - Creative Commons Zero
+# SPDX-FileCopyrightText 2022 Helmholtz-Zentrum hereon
+# SPDX-License-Identifier: CC-0
+
+# First stage checks for metadata (licenses)
 stages:
     - build
     - deploy
 
 variables:
-    CONTAINER_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/python-poetry:${VERSION}
+    CONTAINER_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/esmf:${VERSION}-${COMMUNICATOR}
+    COMMUNICATOR: openmpi
 
 .base_job:
     image: docker:20.10.17
@@ -13,23 +24,27 @@ variables:
         - docker
     parallel:
         matrix:
-            - VERSION: ["3.8", "3.9", "3.10"]
+#            - VERSION: ["v8.0.0", "v8.1.0", "v8.2.0", "v8.3.0", "v8.4.0b01"]
+            - VERSION: [ "v8.3.0" ]
+ #           - COMMUNICATOR: ["openmpi"]
 
 build-docker:
-    extends: .base_job
+    extends: 
+        - .base_job
     stage: build
     script:
-        - docker build -t $CONTAINER_REGISTRY_IMAGE --build-arg VERSION=${VERSION} .
+        - docker build -t $CONTAINER_REGISTRY_IMAGE --build-arg VERSION=${VERSION} --build-arg COMMUNICATOR=${COMMUNICATOR} .
     rules:
         - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
 
 push-docker:
-    extends: .base_job
+    extends: 
+        - .base_job
     stage: deploy
     before_script:
         - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     script:
-        - docker build -t $CONTAINER_REGISTRY_IMAGE --build-arg VERSION=${VERSION} .
+        - docker build -t $CONTAINER_REGISTRY_IMAGE --build-arg VERSION=${VERSION} --build-arg COMMUNICATOR=${COMMUNICATOR} .
         - docker push $CONTAINER_REGISTRY_IMAGE
     rules:
         - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
