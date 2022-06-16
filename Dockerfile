@@ -1,4 +1,6 @@
-FROM python:3.10
+ARG VERSION
+
+FROM python:${VERSION}
 
 MAINTAINER Tobias Huste <t.huste@hzdr.de>
 
