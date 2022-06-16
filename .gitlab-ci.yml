@@ -10,6 +10,6 @@ build-docker:
     services:
         - docker:20.10.17-dind
     script:
-        - docker build -t $CONTAINER_3_10_TAG
+        - docker build -t $CONTAINER_3_10_TAG .
     tags:
         - docker
