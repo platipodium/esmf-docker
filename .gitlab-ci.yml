@@ -14,7 +14,11 @@ build-docker:
 
     script:
         # pass the VERSION variable to your container (see Dockerfile)
-        - docker build -t $CI_REGISTRY_IMAGE/python-poetry:3.10 --build-arg VERSION=3.10 .
+        - docker build -t $CI_REGISTRY_IMAGE/python-poetry:${VERSION} --build-arg VERSION=${VERSION} .
 
     tags:
         - docker
+
+    parallel:
+        matrix:
+            - VERSION: ["3.8", "3.9", "3.10"]
