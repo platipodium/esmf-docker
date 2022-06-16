@@ -8,11 +8,16 @@ ARG COMMUNICATOR="openmpi"
 RUN apt update && apt -qy install cmake python3 python3-pip python-is-python3 lib${COMMUNICATOR%%3}-dev libmetis-dev libnetcdf-dev libnetcdff-dev git
 ENV PATH="/usr/lib64/${COMMUNICATOR}/bin:${PATH}"
 
-WORKDIR /usr/src/
-RUN git clone --depth 1 https://git.code.sf.net/p/esmf/esmf
+ENV ESMF_DIR=/usr/src/esmf
+
+RUN git clone --depth 1 https://git.code.sf.net/p/esmf/esmf ${ESMF_DIR}
+
+WORKDIR ${ESMF_DIR}
+
+RUN git fetch --tags
+RUN git checkout ${VERSION}
 
 # Install ESMF
-ENV ESMF_DIR=/usr/src/esmf
 ENV ESMF_COMM=${COMMUNICATOR}
 ENV ESMF_COMPILER="gfortran"
 ENV ESMF_INSTALL_PREFIX="/usr/local"
