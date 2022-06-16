@@ -1,24 +1,35 @@
 stages:
     - build
+    - deploy
 
+variables:
+    CONTAINER_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/python-poetry:${VERSION}
 
-build-docker:
-    # Have a docker in docker client
+.base_job:
     image: docker:20.10.17
-    stage: build
-    
-    # Load other services, such as databases or dockers, will be 
-    # available in your image.  
-    services: 
-        - docker:20.10.17-dind # dind = docker in docker
-
-    script:
-        # pass the VERSION variable to your container (see Dockerfile)
-        - docker build -t $CI_REGISTRY_IMAGE/python-poetry:${VERSION} --build-arg VERSION=${VERSION} .
-
+    services:
+        - docker:20.10.17-dind
     tags:
         - docker
-
     parallel:
         matrix:
             - VERSION: ["3.8", "3.9", "3.10"]
+
+build-docker:
+    extends: .base_job
+    stage: build
+    script:
+        - docker build -t $CONTAINER_REGISTRY_IMAGE --build-arg VERSION=${VERSION} .
+    rules:
+        - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+
+push-docker:
+    extends: .base_job
+    stage: deploy
+    before_script:
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    script:
+        - docker build -t $CONTAINER_REGISTRY_IMAGE --build-arg VERSION=${VERSION} .
+        - docker push $CONTAINER_REGISTRY_IMAGE
+    rules:
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
