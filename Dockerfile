@@ -5,17 +5,23 @@ MAINTAINER Carsten Lemmen <carsten.lemmen@hereon.de>
 ARG VERSION="v8.3.0"
 ARG COMMUNICATOR="openmpi"
 
-RUN apt update && apt -qy install cmake python3 python3-pip python-is-python3 lib${COMMUNICATOR%%3}-dev libmetis-dev libnetcdf-dev libnetcdff-dev git
+RUN apt update && apt -qy install cmake wget python3 python3-pip python-is-python3 lib${COMMUNICATOR%%3}-dev libmetis-dev libnetcdf-dev libnetcdff-dev git
 ENV PATH="/usr/lib64/${COMMUNICATOR}/bin:${PATH}"
 
-ENV ESMF_DIR=/usr/src/esmf
+WORDKDIR /usr/src
+RUN wget --no-check-certificate https://codeload.github.com/esmf-org/esmf/tar.gz/refs/tags/ESMF_8_3_0 -o ESMF_8_3_0.tar.gz
+RUN tar xzf ESMF_8_2_0.tar.gz
+#h  
 
-RUN git clone --depth 1 https://git.code.sf.net/p/esmf/esmf ${ESMF_DIR}
-
+ENV ESMF_DIR=/usr/src/esmf_8_2_0
 WORKDIR ${ESMF_DIR}
 
-RUN git fetch --tags
-RUN git checkout ${VERSION}
+# RUN git clone --depth 1 https://git.code.sf.net/p/esmf/esmf ${ESMF_DIR}
+# https://codeload.github.com/esmf-org/esmf/tar.gz/refs/tags/ESMF_8_2_0
+
+
+#RUN git fetch --tags
+#RUN git checkout ${VERSION}
 
 # Install ESMF
 ENV ESMF_COMM=${COMMUNICATOR}
