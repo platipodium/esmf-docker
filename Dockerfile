@@ -8,7 +8,7 @@ ARG COMMUNICATOR="openmpi"
 RUN apt update && apt -qy install cmake wget python3 python3-pip python-is-python3 lib${COMMUNICATOR%%3}-dev libmetis-dev libnetcdf-dev libnetcdff-dev git
 ENV PATH="/usr/lib64/${COMMUNICATOR}/bin:${PATH}"
 
-WORDKDIR /usr/src
+WORKDIR /usr/src
 RUN wget --no-check-certificate https://codeload.github.com/esmf-org/esmf/tar.gz/refs/tags/ESMF_8_3_0 -o ESMF_8_3_0.tar.gz
 RUN tar xzf ESMF_8_2_0.tar.gz
 #h  
