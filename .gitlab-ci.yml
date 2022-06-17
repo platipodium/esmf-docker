@@ -16,6 +16,9 @@ variables:
     CONTAINER_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/esmf:${VERSION}-${COMMUNICATOR}
     COMMUNICATOR: openmpi
 
+default:
+    interruptible: true
+
 .base_job:
     image: docker:20.10.17
     services:
