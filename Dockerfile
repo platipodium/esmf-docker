@@ -1,18 +1,22 @@
-# SPDX-FileCopyrightText: 2022 Helmholtz-Zentrum hereon
+# SPDX-FileCopyrightText: 2022 Helmholtz-Zentrum Hereon
 # SPDX-License-Identifier: CC0-1.0
 # SPDX-FileContributor Carsten Lemmen <carsten.lemmen@hereon.de
 
 FROM ubuntu:latest
 LABEL description="ESMF development environment based on Ubuntu"
-MAINTAINER Carsten Lemmen <carsten.lemmen@hereon.de>
+LABEL author="Carsten Lemmen <carsten.lemmen@hereon.de>"
+LABEL license="CC0-1.0"
+LABEL copyright="2022 Helmholtz-Zentrum Hereon"
 
+# Arguments can be passed via the --build-arg key=value command to the 
+# docker build command.  The default values are set below to openmpi, v8.4.0
 ARG VERSION="v8.4.0"
-ARG COMMUNICATOR="openmpi" # or mpich, this needs to be set via environment
+ARG COMMUNICATOR="openmpi"
 
 RUN apt update && apt -qy install cmake wget python3 python3-pip \
     python-is-python3 lib${COMMUNICATOR}-dev libmetis-dev libnetcdf-dev \
-    libnetcdff-dev git libxerces-c-dev liblapack-dev libyaml-cpp-dev \
-    libparmetis-dev
+    libnetcdff-dev libxerces-c-dev liblapack-dev libyaml-cpp-dev \
+    libparmetis-dev subversion cvs git
 ENV PATH="/usr/lib64/${COMMUNICATOR}/bin:${PATH}"
 
 ENV ESMF_DIR=/usr/src/esmf
@@ -22,7 +26,6 @@ RUN git clone  --branch ${VERSION} --depth 1 https://github.com/esmf-org/esmf.gi
 
 WORKDIR ${ESMF_DIR}
 
-# Install ESMF
 ENV ESMF_COMM=${COMMUNICATOR}
 ENV ESMF_COMPILER="gfortran"
 ENV ESMF_INSTALL_PREFIX="/usr/local"
@@ -32,8 +35,9 @@ ENV ESMF_INSTALL_BINDIR="/usr/local/bin"
 ENV ESMF_INSTALL_DOCDIR="/usr/local/doc"
 ENV ESMF_F90COMPILEOPTS="-fallow-argument-mismatch"
 ENV ESMF_INSTALL_HEADERDIR="/usr/local/include"
-ENV ESMFMKFILE="/usr/local/lib/esmf.mk"
 ENV ESMF_ARRAY_LITE="TRUE"
+
+ENV ESMFMKFILE="/usr/local/lib/esmf.mk"
 
 RUN make -C ${ESMF_DIR} -j8 lib || true
 RUN make -C ${ESMF_DIR} install || true
