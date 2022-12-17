@@ -2,7 +2,7 @@ FROM ubuntu:latest
 LABEL description="ESMF development environment based on Ubuntu"
 MAINTAINER Carsten Lemmen <carsten.lemmen@hereon.de>
 
-ARG VERSION="v8.3.0"
+ARG VERSION="v8.4.0"
 ARG COMMUNICATOR="openmpi"
 
 RUN apt update && apt -qy install cmake wget python3 python3-pip python-is-python3 lib${COMMUNICATOR%%3}-dev libmetis-dev libnetcdf-dev libnetcdff-dev git
