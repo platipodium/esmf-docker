@@ -13,6 +13,7 @@ stages:
 
 variables:
     CONTAINER_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/esmf:${VERSION}-${COMMUNICATOR}
+    VERSION: v8.4.0
 
 default:
     interruptible: true
@@ -25,11 +26,10 @@ default:
         - docker
     parallel:
         matrix:
-            - VERSION: [ "v8.4.0" ]
             - COMMUNICATOR: ["openmpi", "mpich"]
 
 license-compliance:
-    image: python:3.10
+    image: python:3.11
     stage: lint
     before_script:
         - pip install --upgrade pip
@@ -37,7 +37,7 @@ license-compliance:
         - poetry install
     script:
         - poetry run reuse lint
-    allow_failure: true
+    allow_failure: false
 
 # The build-docker job is only executed on non-main branches, i.e. without deployment
 build-docker:
@@ -45,18 +45,18 @@ build-docker:
         - .base_job
     stage: build
     script:
-        - docker build -t $CONTAINER_REGISTRY_IMAGE --build-arg VERSION=${VERSION} --build-arg COMMUNICATOR=${COMMUNICATOR} .
+        - docker build -t ${CONTAINER_REGISTRY_IMAGE} --build-arg VERSION=${VERSION} --build-arg COMMUNICATOR=${COMMUNICATOR} .
     rules:
-        - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+        - if: ${CI_COMMIT_BRANCH} != ${CI_DEFAULT_BRANCH}
 
 push-docker:
     extends: 
         - .base_job
     stage: deploy
     before_script:
-        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
     script:
-        - docker build -t $CONTAINER_REGISTRY_IMAGE --build-arg VERSION=${VERSION} --build-arg COMMUNICATOR=${COMMUNICATOR} .
-        - docker push $CONTAINER_REGISTRY_IMAGE
+        - docker build -t ${} --build-arg VERSION=${VERSION} --build-arg COMMUNICATOR=${COMMUNICATOR} .
+        - docker push ${CONTAINER_REGISTRY_IMAGE}
     rules:
-        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+        - if: ${CI_COMMIT_BRANCH} == ${CI_DEFAULT_BRANCH}
