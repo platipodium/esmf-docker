@@ -11,7 +11,8 @@ ARG COMMUNICATOR="openmpi" # or mpich, this needs to be set via environment
 
 RUN apt update && apt -qy install cmake wget python3 python3-pip \
     python-is-python3 lib${COMMUNICATOR}-dev libmetis-dev libnetcdf-dev \
-    libnetcdff-dev git libxerces-c-dev liblapack-dev libyaml-cpp-dev
+    libnetcdff-dev git libxerces-c-dev liblapack-dev libyaml-cpp-dev \
+    libparmetis-dev
 ENV PATH="/usr/lib64/${COMMUNICATOR}/bin:${PATH}"
 
 ENV ESMF_DIR=/usr/src/esmf
@@ -34,5 +35,5 @@ ENV ESMF_INSTALL_HEADERDIR="/usr/local/include"
 ENV ESMFMKFILE="/usr/local/lib/esmf.mk"
 ENV ESMF_ARRAY_LITE="TRUE"
 
-#RUN make -C ${ESMF_DIR} -j8 lib || true
-#RUN make -C ${ESMF_DIR} install || true
+RUN make -C ${ESMF_DIR} -j8 lib || true
+RUN make -C ${ESMF_DIR} install || true
