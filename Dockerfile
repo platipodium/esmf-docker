@@ -7,26 +7,19 @@ LABEL description="ESMF development environment based on Ubuntu"
 MAINTAINER Carsten Lemmen <carsten.lemmen@hereon.de>
 
 ARG VERSION="v8.4.0"
-ARG COMMUNICATOR="openmpi"
+ARG COMMUNICATOR="openmpi" # or mpich, this needs to be set via environment
 
-RUN apt update && apt -qy install cmake wget python3 python3-pip python-is-python3 lib${COMMUNICATOR%%3}-dev libmetis-dev libnetcdf-dev libnetcdff-dev git
+RUN apt update && apt -qy install cmake wget python3 python3-pip \
+    python-is-python3 lib${COMMUNICATOR}-dev libmetis-dev libnetcdf-dev \
+    libnetcdff-dev git libxerces-c-dev liblapack-dev libyaml-cpp-dev
 ENV PATH="/usr/lib64/${COMMUNICATOR}/bin:${PATH}"
 
 ENV ESMF_DIR=/usr/src/esmf
 
 WORKDIR /usr/src
-RUN git clone --depth 1 https://git.code.sf.net/p/esmf/esmf ${ESMF_DIR}
-#RUN wget --no-check-certificate https://codeload.github.com/esmf-org/esmf/tar.gz/refs/tags/ESMF_8_3_0 -o ESMF_8_3_0.tar.gz
-#RUN tar xzf ESMF_8_2_0.tar.gz
-#h  
+RUN git clone  --branch ${VERSION} --depth 1 https://github.com/esmf-org/esmf.git ${ESMF_DIR}
 
-#ENV ESMF_DIR=/usr/src/esmf_8_2_0
 WORKDIR ${ESMF_DIR}
-
-# https://codeload.github.com/esmf-org/esmf/tar.gz/refs/tags/ESMF_8_2_0
-
-#RUN git fetch --tags
-#RUN git checkout ${VERSION}
 
 # Install ESMF
 ENV ESMF_COMM=${COMMUNICATOR}
@@ -41,5 +34,5 @@ ENV ESMF_INSTALL_HEADERDIR="/usr/local/include"
 ENV ESMFMKFILE="/usr/local/lib/esmf.mk"
 ENV ESMF_ARRAY_LITE="TRUE"
 
-RUN make -C ${ESMF_DIR} -j8 all || true
-RUN make -C ${ESMF_DIR} install || true
+#RUN make -C ${ESMF_DIR} -j8 lib || true
+#RUN make -C ${ESMF_DIR} install || true
