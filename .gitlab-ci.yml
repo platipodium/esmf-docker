@@ -1,11 +1,9 @@
 # GitLab CI configuration file for building ESMF docker images based
 # on ubuntu
 # 
-# @author Carsten Lemmen <carsten.lemmen@hereon.de
-# @copyright 2022 Helmholtz-Zentrum hereon
-# @license CC-0 - Creative Commons Zero
-# SPDX-FileCopyrightText 2022 Helmholtz-Zentrum hereon
-# SPDX-License-Identifier: CC-0
+# SPDX-FileCopyrightText: 2022 Helmholtz-Zentrum hereon
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileContributor Carsten Lemmen <carsten.lemmen@hereon.de
 
 # First stage checks for metadata (licenses)
 stages:
