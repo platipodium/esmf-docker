@@ -7,12 +7,12 @@
 
 # First stage checks for metadata (licenses)
 stages:
+    - lint
     - build
     - deploy
 
 variables:
     CONTAINER_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/esmf:${VERSION}-${COMMUNICATOR}
-    COMMUNICATOR: openmpi
 
 default:
     interruptible: true
@@ -25,10 +25,21 @@ default:
         - docker
     parallel:
         matrix:
-#            - VERSION: ["v8.0.0", "v8.1.0", "v8.2.0", "v8.3.0", "v8.4.0b01"]
-            - VERSION: [ "v8.3.0" ]
- #           - COMMUNICATOR: ["openmpi"]
+            - VERSION: [ "v8.4.0" ]
+            - COMMUNICATOR: ["openmpi", "mpich"]
 
+license-compliance:
+    image: python:3.10
+    stage: lint
+    before_script:
+        - pip install --upgrade pip
+        - pip install poetry
+        - poetry install
+    script:
+        - poetry run reuse lint
+    allow_failure: true
+
+# The build-docker job is only executed on non-main branches, i.e. without deployment
 build-docker:
     extends: 
         - .base_job
