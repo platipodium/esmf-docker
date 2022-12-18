@@ -36,6 +36,13 @@ ENV ESMF_INSTALL_DOCDIR="/usr/local/doc"
 ENV ESMF_F90COMPILEOPTS="-fallow-argument-mismatch"
 ENV ESMF_INSTALL_HEADERDIR="/usr/local/include"
 ENV ESMF_ARRAY_LITE="TRUE"
+ENV ESMF_NETCDF="nc-config"
+ENV ESMF_XERCES="standard"
+ENV ESMF_LAPACK="system"
+ENV ESMF_XERCES="standard"
+ENV ESMF_YAMLCPP="internal"
+ENV ESMF_PIO="internal"
+ENV ESMF_MOAB="internal"
 
 ENV ESMFMKFILE="/usr/local/lib/esmf.mk"
 
