@@ -1,0 +1,42 @@
+
+# Travis CI configuration file for building ESMF docker images based
+# on ubuntu
+# 
+# SPDX-FileCopyrightText: 2022 Helmholtz-Zentrum hereon
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileContributor Carsten Lemmen <carsten.lemmen@hereon.de
+
+language: python
+python:
+  - "3.11"
+
+services:
+  - docker
+
+env:
+  - COMMUNICATOR=openmpi
+  - COMMUNICATOR=mpich
+
+install:
+  - pip install --upgrade pip
+  - pip install poetry
+  - poetry install
+
+before_script:
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+
+script:
+  - poetry run reuse lint
+  - docker build -t "$CONTAINER_REGISTRY_IMAGE" --build-arg VERSION="$VERSION" --build-arg COMMUNICATOR="$COMMUNICATOR" .
+  - docker push "$CONTAINER_REGISTRY_IMAGE"
+
+jobs:
+  include:
+    - stage: build
+      env:
+        - VERSION=v8.4.0
+      if: type = pull_request
+    - stage: deploy
+      env:
+        - VERSION=v8.4.0
+      if: type = push
