@@ -38,11 +38,12 @@ ENV ESMF_INSTALL_HEADERDIR="/usr/local/include"
 ENV ESMF_ARRAY_LITE="TRUE"
 ENV ESMF_NETCDF="nc-config"
 ENV ESMF_XERCES="standard"
-ENV ESMF_LAPACK="internal"  # should be changed to standard
+ENV ESMF_LAPACK="internal"
 ENV ESMF_XERCES="standard"
 ENV ESMF_YAMLCPP="internal"
 ENV ESMF_PIO="internal"
 ENV ESMF_MOAB="internal"
+ENV ESMF_ABI=64
 
 ENV ESMFMKFILE="/usr/local/lib/esmf.mk"
 
