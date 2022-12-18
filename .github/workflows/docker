@@ -1,5 +1,9 @@
 # Github CI configuration file for building ESMF docker images based
 # on ubuntu
+#
+# SPDX-FileCopyrightText: 2022 Helmholtz-Zentrum hereon
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileContributor Carsten Lemmen <carsten.lemmen@hereon.de
 
 name: Build and Deploy ESMF Docker Images
 
