@@ -31,7 +31,7 @@ jobs:
       - name: Run license compliance check
         run: poetry run reuse lint
 
-    build:
+  build:
       runs-on: ubuntu-latest
       needs: lint
       steps:
@@ -63,7 +63,7 @@ jobs:
             args: ${COMMUNICATOR}
             tags: ${CONTAINER_REGISTRY_IMAGE}
  
-    test:
+  test:
       runs-on: ubuntu-latest
       needs: build
       steps:
