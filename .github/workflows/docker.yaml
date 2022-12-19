@@ -32,8 +32,8 @@ jobs:
       needs: lint
       strategy: 
           matrix:
-            - COMMUNICATOR: ["openmpi", "mpich"]
-            - VERSION: ["v8.4.0"]
+            COMMUNICATOR: ["openmpi", "mpich"]
+            VERSION: ["v8.4.0"]
 
       env:
         CONTAINER_REGISTRY_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/esmf:${{ matrix.VERSION }}-${{ matrix.COMMUNICATOR}}}
@@ -70,8 +70,8 @@ jobs:
       needs: build
       strategy:
           matrix:
-            - COMMUNICATOR: ["openmpi", "mpich"]
-            - VERSION: ["v8.4.0"]
+            COMMUNICATOR: ["openmpi", "mpich"]
+            VERSION: ["v8.4.0"]
       env:
         CONTAINER_REGISTRY_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/esmf:${{ matrix.VERSION }}-${{ matrix.COMMUNICATOR}}}
       steps:
