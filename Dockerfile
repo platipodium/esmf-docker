@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: CC0-1.0
 # SPDX-FileContributor Carsten Lemmen <carsten.lemmen@hereon.de
 
-FROM ubuntu:latest
+FROM phusion/baseimage:jammy-1.0.1
 LABEL description="ESMF development environment based on Ubuntu"
 LABEL author="Carsten Lemmen <carsten.lemmen@hereon.de>"
 LABEL license="CC0-1.0"

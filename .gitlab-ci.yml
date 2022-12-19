@@ -9,24 +9,24 @@
 stages:
     - lint
     - build
-    - deploy
+    - test
 
 variables:
-    CONTAINER_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/esmf:${VERSION}-${COMMUNICATOR}
     VERSION: v8.4.0
+    CONTAINER_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/esmf:${VERSION}-${COMMUNICATOR}
 
 default:
     interruptible: true
+    before_script: 
+        - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
 
-.base_job:
-    image: docker:20.10.17
+    image: docker:20.10.22
     services:
-        - docker:20.10.17-dind
-    tags:
-        - docker
+        - docker:20.10.22-dind
     parallel:
         matrix:
             - COMMUNICATOR: ["openmpi", "mpich"]
+    allow_failure: false
 
 license-compliance:
     image: python:3.11
@@ -37,30 +37,16 @@ license-compliance:
         - poetry install
     script:
         - poetry run reuse lint
-    allow_failure: false
 
-# The build-docker job is only executed on non-main branches, i.e. without deployment
-build-docker:
-    extends: 
-        - .base_job
+build:
     stage: build
     script:
-        - docker build -t ${CONTAINER_REGISTRY_IMAGE} --build-arg VERSION=${VERSION} --build-arg COMMUNICATOR=${COMMUNICATOR} .
-    rules:
-        - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
-    interruptible: true
-    allow_failure: false
-
-push-docker:
-    extends: 
-        - .base_job
-    stage: deploy
-    before_script:
-        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    script:
+        - docker build --pull  # fetch changes to base image
         - docker build -t ${CONTAINER_REGISTRY_IMAGE} --build-arg VERSION=${VERSION} --build-arg COMMUNICATOR=${COMMUNICATOR} .
         - docker push ${CONTAINER_REGISTRY_IMAGE}
-    rules:
-        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    interruptible: true
-    allow_failure: false
+
+test:
+    stage: test
+    script:
+        - docker pull ${CONTAINER_REGISTRY_IMAGE}
+        - docker run ${CONTAINER_REGISTRY_IMAGE} /usr/local/bin/ESMF_PrintInfo
