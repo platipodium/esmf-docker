@@ -24,8 +24,11 @@ jobs:
           pip install --upgrade pip
           pip install poetry
           poetry install
+          which poetry
       - name: Run license compliance check
-        run: poetry run reuse lint
+        run: |
+          which poetry
+          # poetry run reuse lint
 
   build:
       runs-on: ubuntu-latest
