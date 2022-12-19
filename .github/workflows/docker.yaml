@@ -38,7 +38,7 @@ jobs:
             VERSION: ["v8.4.0"]
 
       env:
-        CONTAINER_REGISTRY_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/esmf:${{ matrix.VERSION }}-${{ matrix.COMMUNICATOR}}}
+        CONTAINER_REGISTRY_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/esmf:${{ matrix.VERSION }}-${{ matrix.COMMUNICATOR}}
 
       steps:
         -
@@ -65,7 +65,8 @@ jobs:
             push: true
             platforms: linux/amd64,linux/arm64
             build-args: COMMUNICATOR=${{ matrix.COMMUNICATOR }}
-            tags: ${{ env.CONTAINER_REGISTRY_IMAGE }}
+            #tags: ${{ env.CONTAINER_REGISTRY_IMAGE }}
+            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/esmf:${{ matrix.VERSION }}-${{ matrix.COMMUNICATOR}}
  
   test:
       runs-on: ubuntu-latest
@@ -75,7 +76,7 @@ jobs:
             COMMUNICATOR: ["openmpi", "mpich"]
             VERSION: ["v8.4.0"]
       env:
-        CONTAINER_REGISTRY_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/esmf:${{ matrix.VERSION }}-${{ matrix.COMMUNICATOR}}}
+        CONTAINER_REGISTRY_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/esmf:${{ matrix.VERSION }}-${{ matrix.COMMUNICATOR}}
       steps:
         -
           name: Checkout
