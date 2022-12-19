@@ -15,8 +15,7 @@ variables:
     VERSION: v8.4.0
     CONTAINER_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/esmf:${VERSION}-${COMMUNICATOR}
 
-default:
-    interruptible: true
+.base:
     before_script: 
         - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
 
@@ -27,6 +26,7 @@ default:
         matrix:
             - COMMUNICATOR: ["openmpi", "mpich"]
     allow_failure: false
+    interruptible: true
 
 license-compliance:
     image: python:3.11
@@ -39,6 +39,7 @@ license-compliance:
         - poetry run reuse lint
 
 build:
+    extends: .base
     stage: build
     script:
         - docker build --pull  # fetch changes to base image
@@ -46,6 +47,7 @@ build:
         - docker push ${CONTAINER_REGISTRY_IMAGE}
 
 test:
+    extends: .base
     stage: test
     script:
         - docker pull ${CONTAINER_REGISTRY_IMAGE}
