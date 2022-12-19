@@ -12,6 +12,8 @@ stages:
     - test
 
 variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: "/certs"
     VERSION: v8.4.0
     CONTAINER_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/esmf:${VERSION}-${COMMUNICATOR}
 
