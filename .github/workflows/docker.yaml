@@ -84,6 +84,5 @@ jobs:
             password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
             image: ${CONTAINER_REGISTRY_IMAGE}
             options: -v ${{ github.workspace }}:/work
-          run: |
-             /work/usr/local/bin/ESMF_PrintInfo
+            run: /work/usr/local/bin/ESMF_PrintInfo
 
