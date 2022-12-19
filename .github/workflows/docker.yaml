@@ -64,7 +64,9 @@ jobs:
             file: ./Dockerfile
             push: true
             platforms: linux/amd64,linux/arm64
-            args: ${{ matrix.COMMUNICATOR }}
+            build-args: 
+              COMMUNICATOR: ${{ matrix.COMMUNICATOR }}
+              VERSION: ${{ matrix.VERSION }}
             tags: ${{ env.CONTAINER_REGISTRY_IMAGE }}
  
   test:
