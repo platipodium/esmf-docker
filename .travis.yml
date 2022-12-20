@@ -6,16 +6,30 @@
 # SPDX-License-Identifier: CC0-1.0
 # SPDX-FileContributor Carsten Lemmen <carsten.lemmen@hereon.de
 
-language: python
-python:
-  - "3.11"
-
+language: generic
+dist: jammy
 services:
   - docker
 
+git:
+  depth: 1
+  quiet: true
+
 env:
-  - COMMUNICATOR=openmpi
-  - COMMUNICATOR=mpich
+  VERSION: v8.4.0
+
+  matrix:
+    - COMMUNICATOR=openmpi
+    - COMMUNICATOR=mpich
+
+before_install:
+  - sudo -E apt-get -yq update && \
+    sudo -E apt-get -yq --no-install-suggests --no-install-recommends --force-yes \
+    lib${COMMUNICATOR}-dev \
+    cmake wget python3 python3-pip \
+    python-is-python3 libmetis-dev libnetcdf-dev \
+    libnetcdff-dev libxerces-c-dev liblapack-dev libyaml-cpp-dev \
+    libparmetis-dev subversion cvs git
 
 install:
   - pip install --upgrade pip
@@ -23,20 +37,15 @@ install:
   - poetry install
 
 before_script:
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+#  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
 
 script:
   - poetry run reuse lint
-  - docker build -t "$CONTAINER_REGISTRY_IMAGE" --build-arg VERSION="$VERSION" --build-arg COMMUNICATOR="$COMMUNICATOR" .
-  - docker push "$CONTAINER_REGISTRY_IMAGE"
+#  - docker build -t "$CONTAINER_REGISTRY_IMAGE" --build-arg VERSION="$VERSION" --build-arg COMMUNICATOR="$COMMUNICATOR" .
+#  - docker push "$CONTAINER_REGISTRY_IMAGE"
 
-jobs:
-  include:
-    - stage: build
-      env:
-        - VERSION=v8.4.0
-      if: type = pull_request
-    - stage: deploy
-      env:
-        - VERSION=v8.4.0
-      if: type = push
+after_success: 
+cache:
+  apt: true
+  directories:
+  - $HOME/travis
