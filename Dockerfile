@@ -3,6 +3,7 @@
 # SPDX-FileContributor Carsten Lemmen <carsten.lemmen@hereon.de
 
 FROM phusion/baseimage:jammy-1.0.1
+
 LABEL description="ESMF development environment based on Ubuntu"
 LABEL author="Carsten Lemmen <carsten.lemmen@hereon.de>"
 LABEL license="CC0-1.0"
@@ -12,11 +13,12 @@ LABEL copyright="2022 Helmholtz-Zentrum Hereon"
 # docker build command.  The default values are set below to openmpi, v8.4.0
 ARG VERSION="v8.4.0"
 ARG COMMUNICATOR="openmpi"
-
-RUN apt update && apt -qy install cmake wget python3 python3-pip \
+ 
+RUN apt-get update && apt-get -qy install cmake wget python3 python3-pip \
     python-is-python3 lib${COMMUNICATOR}-dev libmetis-dev libnetcdf-dev \
     libnetcdff-dev libxerces-c-dev liblapack-dev libyaml-cpp-dev \
     libparmetis-dev subversion cvs git
+
 ENV PATH="/usr/lib64/${COMMUNICATOR}/bin:${PATH}"
 
 ENV ESMF_DIR=/usr/src/esmf
