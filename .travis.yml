@@ -11,6 +11,8 @@ dist: jammy
 services:
   - docker
 
+sudo: true
+
 git:
   depth: 1
   quiet: true
@@ -30,6 +32,8 @@ before_install:
     python-is-python3 libmetis-dev libnetcdf-dev \
     libnetcdff-dev libxerces-c-dev liblapack-dev libyaml-cpp-dev \
     libparmetis-dev subversion cvs git
+  - if [ "x${COMMUNICATOR}" != "xmpich" ] ; then apt-get remove -qy *mpich* ; fi
+  - if [ "x${COMMUNICATOR}" != "xopenmpi" ] ; then apt-get remove -qy *openmpi* ; fi
 
 install:
   - pip install --upgrade pip
