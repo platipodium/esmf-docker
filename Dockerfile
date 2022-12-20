@@ -19,7 +19,8 @@ RUN apt-get update && apt-get -qy --no-install-suggests --no-install-recommends 
     cmake wget python3 python3-pip \
     python-is-python3 libmetis-dev libnetcdf-dev \
     libnetcdff-dev libxerces-c-dev liblapack-dev libyaml-cpp-dev \
-    libparmetis-dev subversion cvs git
+    libparmetis-dev subversion cvs git \
+    gfortran-11 gcc-11 g++-11
 
 # Ubuntu by default installs openmpi packages even in an mpich toolchain, 
 # leading to wrong selection of the mpi compiler.  
