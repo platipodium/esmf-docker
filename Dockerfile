@@ -19,15 +19,14 @@ RUN apt-get update && apt-get -qy --no-install-recommends \
     cmake wget python3 python3-pip \
     python-is-python3 libnetcdf-dev \
     libnetcdff-dev libxerces-c-dev liblapack-dev libyaml-cpp-dev \
-    libparmetis-dev subversion cvs git
+    libparmetis-dev libmetis-dev subversion cvs git
 
-# Remove all mpich related packages if communicator is not mpich
-RUN [ "x${COMMUNICATOR}" == "xmpich" ] || apt-get remove -qy *mpich*
+# Remove all mpich related packages if communicator is not mpich, or 
+# do the same for openmpi
+RUN if [ "x${COMMUNICATOR}" != "xmpich" ] ; then apt-get remove -qy *mpich* ; fi
+RUN if [ "x${COMMUNICATOR}" != "xopenmpi" ] ; then apt-get remove -qy *openmpi* ; fi
 
-# Remove all opemnpi related packages if communicator is not openmpi
-RUN [ "x${COMMUNICATOR}" == "xmpich" ] || apt-get remove -qy *openmpi*
-
-RUN update-alternatives --get-selections |grep mpi
+RUN update-alternatives --get-selections | grep mpi
 
 ENV PATH="/usr/lib64/${COMMUNICATOR}/bin:${PATH}"
 
