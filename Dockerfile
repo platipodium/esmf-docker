@@ -14,12 +14,13 @@ LABEL copyright="2022 Helmholtz-Zentrum Hereon"
 ARG VERSION="v8.4.0"
 ARG COMMUNICATOR="openmpi"
  
-RUN apt-get update && apt-get -qy --no-install-recommends \
+RUN apt-get update && apt-get -qy \
     install make lib${COMMUNICATOR}-dev \
     cmake wget python3 python3-pip \
     python-is-python3 libnetcdf-dev \
     libnetcdff-dev libxerces-c-dev liblapack-dev libyaml-cpp-dev \
-    libparmetis-dev libmetis-dev subversion cvs git
+    libparmetis-dev libmetis-dev subversion cvs git \
+    gcc-11 gfortran-11 g++-11
 
 # Remove all mpich related packages if communicator is not mpich, or 
 # do the same for openmpi
