@@ -22,10 +22,10 @@ RUN apt-get update && apt-get -qy --no-install-recommends \
     libparmetis-dev subversion cvs git
 
 # Remove all mpich related packages if communicator is not mpich
-RUN test [ "x${COMMUNICATOR}" == "xmpich"] || apt-get remove -qy *mpich*
+RUN [ "x${COMMUNICATOR}" == "xmpich" ] || apt-get remove -qy *mpich*
 
 # Remove all opemnpi related packages if communicator is not openmpi
-RUN test [ "x${COMMUNICATOR}" == "xmpich"] || apt-get remove -qy *openmpi*
+RUN [ "x${COMMUNICATOR}" == "xmpich" ] || apt-get remove -qy *openmpi*
 
 RUN update-alternatives --get-selections |grep mpi
 
