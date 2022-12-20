@@ -14,10 +14,17 @@ LABEL copyright="2022 Helmholtz-Zentrum Hereon"
 ARG VERSION="v8.4.0"
 ARG COMMUNICATOR="openmpi"
  
-RUN apt-get update && apt-get -qy install cmake wget python3 python3-pip \
-    python-is-python3 lib${COMMUNICATOR}-dev libmetis-dev libnetcdf-dev \
+RUN apt-get update && apt-get -qy install lib${COMMUNICATOR}-dev \
+    cmake wget python3 python3-pip \
+    python-is-python3 libmetis-dev libnetcdf-dev \
     libnetcdff-dev libxerces-c-dev liblapack-dev libyaml-cpp-dev \
     libparmetis-dev subversion cvs git
+
+#RUN test `update-alternatives --get-selections |grep -c ${COMMUNICATOR}`
+RUN update-alternatives --get-selections |grep -c ${COMMUNICATOR}
+
+#RUN apt-get remove -qy libopenmpi-dev libmpich-dev
+#RUN apt-get install -qy libopenmpi-dev lib${COMMUNICATOR}-dev
 
 ENV PATH="/usr/lib64/${COMMUNICATOR}/bin:${PATH}"
 
