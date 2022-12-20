@@ -20,8 +20,9 @@ RUN apt-get update && apt-get -qy install lib${COMMUNICATOR}-dev \
     libnetcdff-dev libxerces-c-dev liblapack-dev libyaml-cpp-dev \
     libparmetis-dev subversion cvs git
 
-#RUN test `update-alternatives --get-selections |grep -c ${COMMUNICATOR}`
-RUN update-alternatives --get-selections |grep -c ${COMMUNICATOR}
+RUN update-alternatives --get-selections
+#RUN update-alternatives --get-selections |grep ${COMMUNICATOR}
+RUN test `update-alternatives --get-selections |grep -c ${COMMUNICATOR}` -eq 3 
 
 #RUN apt-get remove -qy libopenmpi-dev libmpich-dev
 #RUN apt-get install -qy libopenmpi-dev lib${COMMUNICATOR}-dev
