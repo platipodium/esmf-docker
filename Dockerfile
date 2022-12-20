@@ -15,20 +15,17 @@ ARG VERSION="v8.4.0"
 ARG COMMUNICATOR="openmpi"
  
 RUN apt-get update && apt-get -qy --no-install-suggests --no-install-recommends \
-    --force-yes install lib${COMMUNICATOR}-dev \
+    install make lib${COMMUNICATOR}-dev \
     cmake wget python3 python3-pip \
     python-is-python3 libmetis-dev libnetcdf-dev \
     libnetcdff-dev libxerces-c-dev liblapack-dev libyaml-cpp-dev \
     libparmetis-dev subversion cvs git
 
+# Ubuntu by default installs openmpi packages even in an mpich toolchain, 
+# leading to wrong selection of the mpi compiler.  
+# If openmpi packages were not explicitly requested they must be autoremoved
 RUN apt-get -qy autoremove
-
-#RUN if [ "x${COMMUNICATOR}"" == "xmpich"]; 
-
-RUN update-alternatives --get-selections |grep ${COMMUNICATOR}
-
-#RUN apt-get remove -qy libopenmpi-dev libmpich-dev
-#RUN apt-get install -qy libopenmpi-dev lib${COMMUNICATOR}-dev
+RUN update-alternatives --get-selections |grep mpi
 
 ENV PATH="/usr/lib64/${COMMUNICATOR}/bin:${PATH}"
 
