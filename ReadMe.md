@@ -1,5 +1,5 @@
 <!--
-# SPDX-FileCopyrightText: 2022 Helmholtz-Zentrum hereon
+# SPDX-FileCopyrightText: 2022-2023 Helmholtz-Zentrum hereon
 # SPDX-License-Identifier: CC0-1.0
 # SPDX-FileContributor Carsten Lemmen <carsten.lemmen@hereon.de
 -->
