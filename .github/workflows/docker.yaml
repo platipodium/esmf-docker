@@ -1,7 +1,7 @@
 # Github CI configuration file for building ESMF docker images based
 # on ubuntu
 #
-# SPDX-FileCopyrightText: 2022 Helmholtz-Zentrum hereon
+# SPDX-FileCopyrightText: 2022-2023 Helmholtz-Zentrum hereon
 # SPDX-License-Identifier: CC0-1.0
 # SPDX-FileContributor Carsten Lemmen <carsten.lemmen@hereon.de
 
@@ -64,7 +64,9 @@ jobs:
             file: ./Dockerfile
             push: true
             platforms: linux/amd64,linux/arm64
-            build-args: COMMUNICATOR=${{ matrix.COMMUNICATOR }} VERSION=${{ matrix.VERSION }}
+            build-args: |
+              "COMMUNICATOR=${{ matrix.COMMUNICATOR }}"
+              "VERSION=${{ matrix.VERSION }}"
             #tags: ${{ env.CONTAINER_REGISTRY_IMAGE }}
             tags: ${{ secrets.DOCKER_HUB_USERNAME }}/esmf:${{ matrix.VERSION }}-${{ matrix.COMMUNICATOR}}
  

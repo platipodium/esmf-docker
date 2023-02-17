@@ -7,7 +7,7 @@ FROM phusion/baseimage:jammy-1.0.1
 LABEL description="ESMF development environment based on Ubuntu"
 LABEL author="Carsten Lemmen <carsten.lemmen@hereon.de>"
 LABEL license="CC0-1.0"
-LABEL copyright="2022 Helmholtz-Zentrum Hereon"
+LABEL copyright="2022-2023 Helmholtz-Zentrum Hereon"
 
 # Arguments can be passed via the --build-arg key=value command to the 
 # docker build command.  The default values are set below to openmpi, v8.4.0
