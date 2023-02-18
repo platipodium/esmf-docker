@@ -18,9 +18,9 @@ variables:
     CONTAINER_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/jammy-gnu:${VERSION}-${COMMUNICATOR}
 
 .base:
-    image: docker:20.10.17
+    image: docker # :20.10.17
     services:
-        - docker:20.10.17-dind
+        - docker:dind # 20.10.17-dind
     parallel:
         matrix:
             - COMMUNICATOR: ["openmpi", "mpich"]
